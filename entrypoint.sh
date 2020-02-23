@@ -8,7 +8,9 @@ fi
 if [ $UID != $(echo `id -u wechat`) ]; then
     usermod -o -u $UID wechat
 fi
-chown wechat:wechat /WXWork
+
+chown wechat:wechat /WXWork /home/wechat
+chown wechat:wechat /home/wechat/.deepinwine -R | true
 
 su wechat <<EOF
     echo "启动 $APP"

@@ -45,6 +45,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - $HOME/WXWork:/WXWork
       - $HOME:/HostHome # 可选，用于发送文件
+      - $HOME/wine-WXWork:/home/wechat/.deepinwine/Deepin-WXWork # 可选，用于持久化 例如：更新企业微信 (Beta功能)
     environment:
       - DISPLAY=unix$DISPLAY
       - QT_IM_MODULE=fcitx
@@ -62,6 +63,7 @@ services:
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $HOME/WXWork:/WXWork \
     -v $HOME:/HostHome \
+    -v $HOME/wine-WXWork:/home/wechat/.deepinwine/Deepin-WXWork \
     -e DISPLAY=unix$DISPLAY \
     -e XMODIFIERS=@im=fcitx \
     -e QT_IM_MODULE=fcitx \
@@ -71,3 +73,8 @@ services:
     -e UID=`id -u` \
     boringcat/wechat:work
 ```
+
+### 更新版本
+没有测试能否在docker内启动更新，可以选择将wine文件夹挂载出来，然后手动覆盖最新版企业微信  
+**注意：** `entrypoint.sh` 内会更新 `/home/wechat/.deepinwine` 的所有权 `chown wechat:wechat /home/wechat/.deepinwine -R`  
+**注意2：** 尚未解明deepin-wine在什么条件下会重新解压应用到 `/home/wechat/.deepinwine` 中。如果要挂载 `/home/wechat/.deepinwine` 建议在确保有备份的情况下挂载，或者判断不需要写入权限时以`ro`挂载
