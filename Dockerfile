@@ -15,7 +15,8 @@ ENV APP=WXWork \
     AUDIO_GID=995 \
     VIDEO_GID=986 \
     GID=1000 \
-    UID=1000
+    UID=1000 \
+    DPI=96
 
 RUN groupadd -o -g $GID wechat && \
     groupmod -o -g $AUDIO_GID audio && \
@@ -23,7 +24,9 @@ RUN groupadd -o -g $GID wechat && \
     useradd -d "/home/wechat" -m -o -u $UID -g wechat -G audio,video wechat && \
     mkdir /WXWork && \
     chown -R wechat:wechat /WXWork && \
-    ln -s "/WXWork" "/home/wechat/WXWork"
+    ln -s "/WXWork" "/home/wechat/WXWork" && \
+    INSERTLINE=$(awk '{if(match($0,/ExtractApp\(\)/)){f=1}else if(match($0,/^}\s?$/)&&f){f=0;print NR-2}}' /opt/deepinwine/tools/run_v2.sh) && \
+    sed -i "${INSERTLINE}a\\\\tREGDPI=\$(printf '\"LogPixels\"=dword:%08x' \$DPI)\\n\\tsed -i \"s/\\\\\"LogPixels\\\\\"=.*$/\$REGDPI/g\" \$1/system.reg" /opt/deepinwine/tools/run_v2.sh
 
 VOLUME ["/WXWork", "/HostHome"]
 

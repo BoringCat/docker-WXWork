@@ -12,14 +12,32 @@ fi
 chown wechat:wechat /WXWork /home/wechat
 chown wechat:wechat /home/wechat/.deepinwine -R | true
 
-su wechat <<EOF
-    echo "启动 $APP"
-    "/opt/deepinwine/apps/Deepin-$APP/run.sh"
-   sleep 300
-EOF
+if [ -f "/home/wechat/.deepinwine/Deepin-$APP/system.reg" ]; then
+    REGDPI=$(printf '"LogPixels"=dword:%08x' $DPI)
+    sed -i "s/\"LogPixels\"=.*$/$REGDPI/g" /home/wechat/.deepinwine/Deepin-$APP/system.reg
+fi
 
-while test -n "`pidof WXWork.exe`"
+su wechat -c '
+echo "启动 $APP"
+"/opt/deepinwine/apps/Deepin-$APP/run.sh"
+export Timei=0
+echo "Timei: "$Timei
+while true
 do
-    sleep 60
-done
+    export PID=$(pidof WXWork.exe)
+    echo "PID: "$PID
+    if [ -z $PID ]; then
+        if [ $Timei -eq 300 ]; then
+            break
+        else
+            let Timei++
+        fi
+        sleep 1
+    else
+        break
+    fi
+done'
+
+tail --pid=`pidof WXWork.exe` -f /dev/null > /dev/null 2>&1
+
 echo "退出"
