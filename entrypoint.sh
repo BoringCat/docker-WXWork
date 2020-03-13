@@ -9,7 +9,7 @@ fi
 checkPid() {
     tail --pid=$1 -f /dev/null > /dev/null 2>&1
     sleep $WAIT_FOR_SLEEP
-    [ ! -z "`pidof WXWork.exe`" ] && checkPid `pidof WXWork.exe`
+    [ ! -z "`pidof WXWork.exe`" ] && checkPid `pidof WXWork.exe` || exit 0
 }
 
 groupmod -o -g $AUDIO_GID audio
@@ -53,3 +53,4 @@ done"
 checkPid `pidof WXWork.exe`
 
 echo "退出"
+exit 0

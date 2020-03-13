@@ -28,7 +28,7 @@ RUN set -xe && \
     useradd -d "/home/wechat" -m -o -u $UID -g wechat -G audio,video wechat && \
     mkdir /WXWork && \
     chown -R wechat:wechat /WXWork && \
-    ln -s "/WXWork" "/home/wechat/WXWork" && \
+    su wechat -c 'ln -s "/WXWork" "/home/wechat/WXWork"' && \
     INSERTLINE=$(awk '{if(match($0,/ExtractApp\(\)/)){f=1}else if(match($0,/^}\s?$/)&&f){f=0;print NR-2}}' /opt/deepinwine/tools/run_v2.sh) && \
     sed -i "${INSERTLINE}a\\\\tREGDPI=\$(printf '\"LogPixels\"=dword:%08x' \$DPI)\\n\\tsed -i \"s/\\\\\"LogPixels\\\\\"=.*$/\$REGDPI/g\" \$1/system.reg" /opt/deepinwine/tools/run_v2.sh && \
     sed -i 's/RunApp "\\$3" .*/S3=$3\\n\\t\\tshitf 4\\n\\t\\tRunAPP "$S3" "$@"/g' /opt/deepinwine/tools/run_v2.sh

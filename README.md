@@ -10,6 +10,13 @@
 本镜像基于[深度操作系统](https://www.deepin.org/download/)
 
 ## 更新版本
+### 2020/03/13  
+  * 解决了退出时符合值不为0的问题  
+  * 尝试解决挂载WXWork不生效的问题   
+    * 原因: 企业微信认为 C:\users\wechat\Document\WXWork (/home/wechat/WXWork) 不可读
+    * 当前版本尝试方案: 使用 wechat 用户创建软链接
+    * 最终解决方案: 将 WXWork 挂在至 /home/wechat/WXWork
+
 ### 2020/03/11  
   * 优化了关闭检测，现在不会因为自动更新重启微信导致容器退出了(递归溢出警告)  
   * 允许传递参数给企业微信
@@ -29,8 +36,11 @@
 
 ## **注意事项**
 ### `entrypoint.sh`
+* 使用 host 网络时会出现无法联网的问题，尚未清楚到底是Wine企业微信的问题还是基础容器的问题 (exec进去ping和wget是可以的)
 * 启动时会使用chmod命令替换 /WXWork /home/wechat 的所有者为 `$GID:$UID`
 * 启动时会使用chmod命令替换 /home/wechat/.deepinwine 下**所有目录和文件**的所有者为 `$GID:$UID` 持久化时需要注意 **!!!!!!**
+* 如果遇到挂载WXWork不生效的问题，即Host的WXWork目录下无文件，可以通过在企业微信内配置“文件存储”的位置来解决  
+  非持久化可能存在问题，建议使用持久化
 
 ## 准备工作
 
@@ -68,7 +78,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix
       - $HOME/WXWork:/WXWork
       - $HOME:/HostHome # 可选，用于发送文件
-      - $HOME/wine-WXWork:/home/wechat/.deepinwine/Deepin-WXWork # 可选，用于持久化 例如：更新企业微信
+      - $HOME/wine-WXWork:/home/wechat/.deepinwine/Deepin-WXWork # 可选，建议，用于持久化 例如：更新企业微信
     environment:
       DISPLAY: unix$DISPLAY
       QT_IM_MODULE: fcitx
@@ -100,3 +110,12 @@ services:
     -e WAIT_FOR_SLEEP=1 \
     boringcat/wechat:work
 ```
+
+## 配置解释
+### hostname
+![好看.jpg](images/2020-03-13%2009-30-49%20的屏幕截图.png)  
+![好看2.jpg](images/2020-03-13%2009-30-43%20的屏幕截图.png)
+
+### volumes: $HOME:/HostHome
+![HostHome](images/2020-03-13&#32;09-40-12&#32;的屏幕截图.png)  
+![Home](images/2020-03-13&#32;09-41-10&#32;的屏幕截图.png)
