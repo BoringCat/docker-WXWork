@@ -1,10 +1,20 @@
 FROM bestwu/wine:i386
 LABEL maintainer='BoringCat <boringcat@outlook.com>'
 
+ARG WXWORK_VERSION=3.0.14.1205
+
+COPY files.7z /tmp/files.7z
+
 RUN set -xe && \
     echo 'deb https://mirrors.aliyun.com/deepin stable main non-free contrib' > /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y --no-install-recommends deepin.com.weixin.work && \
+    apt-get install -y --no-install-recommends deepin.com.weixin.work wget && \
+    wget https://dldir1.qq.com/wework/work_weixin/WXWork_${WXWORK_VERSION}.exe -O /tmp/WXWork.exe && \
+    mkdir -p /tmp/drive_c/Program\ Files/WXWork && \
+    7z x -o/tmp/drive_c/Program\ Files/WXWork /tmp/WXWork.exe && \
+    rm -r /tmp/drive_c/Program\ Files/WXWork/\$PLUGINSDIR/ && \
+    7z a files.7z drive_c/ && \
+    mv /tmp/files.7z /opt/deepinwine/apps/Deepin-WXWork/files.7z && \
     apt-get -y autoremove && apt-get clean -y && apt-get autoclean -y && \
     find /var/lib/apt/lists -type f -delete && \
     find /var/cache -type f -delete && \
@@ -19,7 +29,7 @@ ENV APP=WXWork \
     UID=1000 \
     DPI=96 \
     DEBUG=0 \
-    WAIT_FOR_SLEEP=1
+    WAIT_FOR_SLEEP=5
 
 RUN set -xe && \
     groupadd -o -g $GID wechat && \
