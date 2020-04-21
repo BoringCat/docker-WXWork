@@ -64,16 +64,38 @@
 
 ## 准备工作
 
-允许所有用户访问X11服务,运行命令:
+### 确保系统运行的是X11服务
+``` sh
+$ echo $XDG_SESSION_TYPE
+x11
+```
+
+### 允许所有用户访问X11服务
+运行命令:
 
 ```bash
-xhost +
+$ xhost +
 ```
+
+#### 添加后还是看不到界面？
+参考这个issue的解决方案： [xhost +x 了，但是没有界面](https://github.com/bestwu/docker-qq/issues/8)  
+或 20200421 复制的内容： 
+> 试试禁用“MIT-SHM”共享X进程内存的功能
+> 
+> 具体操作：
+> 
+> vi /etc/X11/xorg.conf
+> 
+> 增加：
+> 
+> Section "Extensions"  
+> &nbsp;&nbsp;Option "MIT-SHM" "Disable"  
+> EndSection
 
 ### 查看系统audio gid
 
 ```bash
-getent group audio | cut -d ":" -f3
+$ getent group audio | cut -d ":" -f3
 ```
 
 Archlinux 结果：
@@ -108,7 +130,7 @@ services:
       GID: 1000 # 可选 默认1000 主机当前用户 gid 解决挂载目录访问权限问题
       UID: 1000 # 可选 默认1000 主机当前用户 uid 解决挂载目录访问权限问题
       DPI: 96 # 可选 默认96 
-      WAIT_FOR_SLEEP: 1 # 可选 用于启动与退出时检测PID的间隔
+      WAIT_FOR_SLEEP: 5 # 可选 用于启动与退出时检测PID的间隔
 ```
 
 或
