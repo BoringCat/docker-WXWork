@@ -15,18 +15,28 @@
   * 内置版本更新到 3.0.14.1205 
   * 别更新到 3.0.16.1608 会报wlanapi.dll错误
 
-### 2020/03/13  
+<details>
+ <summary>2020/03/13</summary>
+ 
   * 解决了退出时符合值不为0的问题  
   * 尝试解决挂载WXWork不生效的问题   
     * 原因: 企业微信认为 C:\users\wechat\Document\WXWork (/home/wechat/WXWork) 不可读
     * 当前版本尝试方案: 使用 wechat 用户创建软链接
     * 最终解决方案: 将 WXWork 挂在至 /home/wechat/WXWork
 
-### 2020/03/11  
+</details>
+
+<details>
+ <summary>2020/03/11</summary>
+ 
   * 优化了关闭检测，现在不会因为自动更新重启微信导致容器退出了(递归溢出警告)  
   * 允许传递参数给企业微信
+  
+</details>
 
-### 2020/03/06  
+<details>
+ <summary>2020/03/06</summary>
+ 
   * 匹配了HIDPI, 只需要在 environment 中传入 DPI=%d  
   目前能做到持久化企业微信时每次修改DPI的值也能生效
   * 解决了容器关闭慢的问题
@@ -34,10 +44,15 @@
   * 目前无法启动企业微信的更新程序，但是启动时的自动更新可以（？？？？？），如有需要请解压企业微信最新的安装包然后覆盖文件夹内容就行
   * RO挂载持久化目前看来不可能，因为企业微信有启动时的自动更新和我的DPI调整脚本
 
+</details>
 
-### 2020/02/23  
+<details>
+ <summary>2020/02/23</summary>
+ 
 * 没有测试能否在docker内启动更新，可以选择将wine文件夹挂载出来，然后手动覆盖最新版企业微信  
-* 尚未解明deepin-wine在什么条件下会重新解压应用到 `/home/wechat/.deepinwine` 中。如果要挂载 `/home/wechat/.deepinwine` 建议在确保有备份的情况下挂载，或者判断不需要写入权限时以`ro`挂载
+* 尚未解明deepin-wine在什么条件下会重新解压应用到 `/home/wechat/.deepinwine` 中。如果要挂载 `/home/wechat/.deepinwine` 建议在确保有备份的情况下挂载，或者判断不需要写入权限时以`ro`挂载  
+
+</details>
 
 ## **注意事项**
 ### `entrypoint.sh`
