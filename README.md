@@ -62,6 +62,19 @@
 * 如果遇到挂载WXWork不生效的问题，即Host的WXWork目录下无文件，可以通过在企业微信内配置“文件存储”的位置来解决  
   非持久化可能存在问题，建议使用持久化
 
+### 非Gnome用户？
+如果你遇到这个情况：
+```
+X Error of failed request: BadWindow (invalid Window parameter)
+Major opcode of failed request: 20 (X_GetProperty)
+Resource id in failed request: 0x0
+Serial number of failed request: 10
+Current serial number in output stream: 10
+```
+请参考：  
+[AUR (en) - deepin.com.qq.office](https://aur.archlinux.org/packages/deepin.com.qq.office/#comment-678293-content)  
+[运行不出界面 · Issue #2 · bestwu/docker-qq](https://github.com/bestwu/docker-qq/issues/2)  
+
 ## 准备工作
 
 ### 确保系统运行的是X11服务
@@ -78,7 +91,7 @@ $ xhost +
 ```
 
 #### 添加后还是看不到界面？
-参考这个issue的解决方案： [xhost +x 了，但是没有界面](https://github.com/bestwu/docker-qq/issues/8)  
+参考这个issue的解决方案： [xhost +x 了，但是没有界面 · Issue #8 · bestwu/docker-qq](https://github.com/bestwu/docker-qq/issues/8)  
 或 20200421 复制的内容： 
 > 试试禁用“MIT-SHM”共享X进程内存的功能
 > 
