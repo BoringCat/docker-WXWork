@@ -134,6 +134,7 @@ services:
       - $HOME/WXWork:/WXWork
       - $HOME:/HostHome # 可选，用于发送文件
       - $HOME/wine-WXWork:/home/wechat/.deepinwine/Deepin-WXWork # 可选，建议，用于持久化 例如：更新企业微信
+    ipc: host
     environment:
       DISPLAY: unix$DISPLAY
       QT_IM_MODULE: fcitx
@@ -149,7 +150,7 @@ services:
 或
 
 ```bash
-    docker run -d --name wechat --device /dev/snd \
+    docker run -d --name wechat --device /dev/snd --ipc host \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $HOME/WXWork:/WXWork \
     -v $HOME:/HostHome \
